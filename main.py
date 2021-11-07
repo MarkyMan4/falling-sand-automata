@@ -16,15 +16,16 @@ class FallingSand:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         self.tiles = []
         self.mouse_is_down = False
+        self.is_running = True
 
     def main_loop(self):
         self.init_tiles()
         pygame.time.set_timer(UPDATEEVENT, t1)
         
-        while True:
+        while self.is_running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    self.is_running = False
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.mouse_is_down = True
@@ -45,11 +46,11 @@ class FallingSand:
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_ESCAPE]: # escape to quit the game
-                break
+                self.is_running = False
 
             pygame.display.update()
 
-        pygame.quit()
+        self.quit_game()
 
     def init_tiles(self):
         """
@@ -125,7 +126,12 @@ class FallingSand:
                     and pos[1] >= i * TILE_SIZE and pos[1] < i * TILE_SIZE + TILE_SIZE:
                     self.tiles[i][j] = SAND_COLOR
 
+    def quit_game(self):
+        pygame.display.quit()
+        pygame.quit()
+        sys.exit()
+
 if __name__ == '__main__':
     fs = FallingSand()
     fs.main_loop()
-    sys.exit()
+    
